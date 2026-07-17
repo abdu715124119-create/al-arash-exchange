@@ -214,10 +214,10 @@
         </div>
 
         <!-- نافذة إدخال كلمة المرور (Password Modal) -->
-        <div id="password-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div id="password-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md hidden items-center justify-center p-4 z-50">
             <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl relative text-center">
-                <button onclick="closePasswordModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white">
-                    <i class="fa-solid fa-xmark text-xl"></i>
+                <button onclick="closePasswordModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-2xl"></i>
                 </button>
                 <div class="bg-yellow-500/10 text-yellow-500 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 border border-yellow-500/20">
                     <i class="fa-solid fa-key text-lg"></i>
@@ -234,10 +234,10 @@
         </div>
 
         <!-- نافذة التحكم المنبثقة (Admin Modal) -->
-        <div id="admin-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div id="admin-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md hidden items-center justify-center p-4 z-50">
             <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative">
-                <button onclick="closeAdminModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white">
-                    <i class="fa-solid fa-xmark text-xl"></i>
+                <button onclick="closeAdminModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-2xl"></i>
                 </button>
                 <h3 class="text-lg font-bold text-yellow-500 mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-user-gear"></i>
@@ -308,8 +308,8 @@
     <footer class="border-t border-slate-800 bg-slate-950 py-6 mt-12 text-center text-xs text-slate-500">
         <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <p>© 2026 منصة العرش لأسعار الصرف. جميع الحقوق محفوظة.</p>
-            <button onclick="openPasswordModal()" class="text-slate-700 hover:text-yellow-500/50 transition-colors duration-200 flex items-center gap-1">
-                <i class="fa-solid fa-lock text-[10px]"></i> إدارة المنصة
+            <button onclick="openPasswordModal()" class="bg-slate-900 border border-slate-800/80 hover:bg-slate-800/80 text-yellow-500 px-4 py-2.5 rounded-xl font-bold transition-all duration-200 flex items-center gap-2">
+                <i class="fa-solid fa-lock text-xs"></i> إدارة المنصة
             </button>
         </div>
     </footer>
@@ -396,14 +396,18 @@
             }
         }
 
-        // دوال لوحة التحكم الجديدة باستخدام نوافذ داخلية لتفادي الحظر
+        // دوال التحكم بالنافذة المنبثقة بالتوافق التام مع Tailwind
         function openPasswordModal() {
-            document.getElementById('password-modal').style.display = 'flex';
+            const modal = document.getElementById('password-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
             document.getElementById('admin-pass-input').focus();
         }
 
         function closePasswordModal() {
-            document.getElementById('password-modal').style.display = 'none';
+            const modal = document.getElementById('password-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
             document.getElementById('admin-pass-input').value = '';
         }
 
@@ -411,7 +415,10 @@
             const enteredPassword = document.getElementById('admin-pass-input').value;
             if (enteredPassword === "1234") {
                 closePasswordModal();
-                document.getElementById('admin-modal').style.display = 'flex';
+                
+                const adminModal = document.getElementById('admin-modal');
+                adminModal.classList.remove('hidden');
+                adminModal.classList.add('flex');
             } else {
                 alert("كلمة المرور خاطئة! يرجى إعادة المحاولة.");
                 document.getElementById('admin-pass-input').value = '';
@@ -420,7 +427,9 @@
         }
 
         function closeAdminModal() {
-            document.getElementById('admin-modal').style.display = 'none';
+            const adminModal = document.getElementById('admin-modal');
+            adminModal.classList.add('hidden');
+            adminModal.classList.remove('flex');
         }
 
         async function saveRates() {
@@ -481,4 +490,4 @@
         window.onload = fetchRates;
     </script>
 </body>
-    </html>
+                                    </html>
