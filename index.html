@@ -213,8 +213,28 @@
 
         </div>
 
-        <!-- نافذة التحكم المنبثقة (Admin Modal) - مخفية افتراضياً -->
-        <div id="admin-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <!-- نافذة إدخال كلمة المرور (Password Modal) -->
+        <div id="password-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl relative text-center">
+                <button onclick="closePasswordModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+                <div class="bg-yellow-500/10 text-yellow-500 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 border border-yellow-500/20">
+                    <i class="fa-solid fa-key text-lg"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">الدخول الآمن</h3>
+                <p class="text-xs text-slate-400 mb-6">الرجاء إدخال كلمة المرور السحرية للوصول للوحة التحكم</p>
+                
+                <input id="admin-pass-input" type="password" placeholder="أدخل كلمة المرور" class="w-full text-center bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-yellow-500 mb-4">
+                
+                <button onclick="checkAdminPassword()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-slate-950 font-bold py-2.5 rounded-xl transition-all duration-200">
+                    دخول
+                </button>
+            </div>
+        </div>
+
+        <!-- نافذة التحكم المنبثقة (Admin Modal) -->
+        <div id="admin-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md hidden items-center justify-center p-4 z-50">
             <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative">
                 <button onclick="closeAdminModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white">
                     <i class="fa-solid fa-xmark text-xl"></i>
@@ -224,7 +244,7 @@
                     تحديث أسعار الصرف
                 </h3>
                 
-                <div class="space-y-4 max-h-[70vh] overflow-y-auto px-1">
+                <div class="space-y-4 max-h-[60vh] overflow-y-auto px-1">
                     <!-- أسعار صنعاء -->
                     <div class="border-b border-slate-800 pb-4">
                         <h4 class="font-bold text-sm text-slate-300 mb-2">صنعاء</h4>
@@ -276,7 +296,7 @@
                     <button id="save-btn" onclick="saveRates()" class="flex-grow bg-yellow-500 hover:bg-yellow-600 text-slate-950 font-bold py-2.5 rounded-xl transition-all duration-200">
                         حفظ الأسعار الجديدة
                     </button>
-                    <button onclick="closeAdminModal()" class="bg-slate-850 hover:bg-slate-800 border border-slate-700 text-slate-300 px-4 py-2.5 rounded-xl transition-all duration-200">
+                    <button onclick="closeAdminModal()" class="bg-slate-800 hover:bg-slate-750 border border-slate-750 text-slate-300 px-4 py-2.5 rounded-xl transition-all duration-200">
                         إلغاء
                     </button>
                 </div>
@@ -288,7 +308,7 @@
     <footer class="border-t border-slate-800 bg-slate-950 py-6 mt-12 text-center text-xs text-slate-500">
         <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <p>© 2026 منصة العرش لأسعار الصرف. جميع الحقوق محفوظة.</p>
-            <button onclick="openAdmin()" class="text-slate-700 hover:text-yellow-500/50 transition-colors duration-200 flex items-center gap-1">
+            <button onclick="openPasswordModal()" class="text-slate-700 hover:text-yellow-500/50 transition-colors duration-200 flex items-center gap-1">
                 <i class="fa-solid fa-lock text-[10px]"></i> إدارة المنصة
             </button>
         </div>
@@ -376,13 +396,26 @@
             }
         }
 
-        // دوال لوحة التحكم السرية
-        function openAdmin() {
-            const password = prompt("الرجاء إدخال كلمة المرور السحرية للوصول للوحة التحكم:");
-            if (password === "1234") {
+        // دوال لوحة التحكم الجديدة باستخدام نوافذ داخلية لتفادي الحظر
+        function openPasswordModal() {
+            document.getElementById('password-modal').style.display = 'flex';
+            document.getElementById('admin-pass-input').focus();
+        }
+
+        function closePasswordModal() {
+            document.getElementById('password-modal').style.display = 'none';
+            document.getElementById('admin-pass-input').value = '';
+        }
+
+        function checkAdminPassword() {
+            const enteredPassword = document.getElementById('admin-pass-input').value;
+            if (enteredPassword === "1234") {
+                closePasswordModal();
                 document.getElementById('admin-modal').style.display = 'flex';
-            } else if (password !== null) {
-                alert("كلمة المرور خاطئة!");
+            } else {
+                alert("كلمة المرور خاطئة! يرجى إعادة المحاولة.");
+                document.getElementById('admin-pass-input').value = '';
+                document.getElementById('admin-pass-input').focus();
             }
         }
 
@@ -437,6 +470,13 @@
                 saveBtn.innerText = "حفظ الأسعار الجديدة";
             }
         }
+
+        // الاستماع لزر Enter أثناء كتابة كلمة المرور للسهولة
+        document.getElementById('admin-pass-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkAdminPassword();
+            }
+        });
 
         window.onload = fetchRates;
     </script>
