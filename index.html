@@ -64,7 +64,7 @@
                 <div>
                     <span class="bg-yellow-500/10 text-yellow-500 text-xs font-bold px-3 py-1.5 rounded-full border border-yellow-500/20">لوحة التحكم والأسعار المباشرة</span>
                     <h2 class="text-2xl md:text-3xl font-extrabold mt-3 mb-2 text-white">العرش للصرافة والتحويلات</h2>
-                    <p class="text-slate-300 text-sm md:text-base max-w-xl">مرحباً بك! هذه الواجهة متصلة مباشرة بقاعدة بياناتك السحابية الآمنة لتعرض لعملائك أسعار بيع وشراء الدولار والريال السعودي في صنعاء وعدن بدقة فائقة.</p>
+                    <p class="text-slate-300 text-sm md:text-base max-w-xl">مرحباً بك! هذه الواجهة متصلة مباشرة بقاعدة بياناتك السحابية الآمنة لتعرض لعملائك أسعار بيع وشراء الدولار والريال السعودي بدقة فائقة.</p>
                 </div>
                 <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 min-w-[200px] text-center">
                     <span class="text-xs text-slate-400 block mb-1">آخر تحديث للأسعار</span>
@@ -212,80 +212,151 @@
             </div>
 
         </div>
+
+        <!-- نافذة التحكم المنبثقة (Admin Modal) - مخفية افتراضياً -->
+        <div id="admin-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative">
+                <button onclick="closeAdminModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+                <h3 class="text-lg font-bold text-yellow-500 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-user-gear"></i>
+                    تحديث أسعار الصرف
+                </h3>
+                
+                <div class="space-y-4 max-h-[70vh] overflow-y-auto px-1">
+                    <!-- أسعار صنعاء -->
+                    <div class="border-b border-slate-800 pb-4">
+                        <h4 class="font-bold text-sm text-slate-300 mb-2">صنعاء</h4>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-1">شراء سعودي</label>
+                                <input id="inp-sanaa-sar-buy" type="number" step="any" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-yellow-500">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-1">بيع سعودي</label>
+                                <input id="inp-sanaa-sar-sell" type="number" step="any" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-yellow-500">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-1">شراء دولار</label>
+                                <input id="inp-sanaa-usd-buy" type="number" step="any" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-yellow-500">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-1">بيع دولار</label>
+                                <input id="inp-sanaa-usd-sell" type="number" step="any" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-yellow-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- أسعار عدن -->
+                    <div class="pb-4">
+                        <h4 class="font-bold text-sm text-slate-300 mb-2">عدن</h4>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-1">شراء سعودي</label>
+                                <input id="inp-aden-sar-buy" type="number" step="any" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-yellow-500">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-1">بيع سعودي</label>
+                                <input id="inp-aden-sar-sell" type="number" step="any" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-yellow-500">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-1">شراء دولار</label>
+                                <input id="inp-aden-usd-buy" type="number" step="any" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-yellow-500">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-1">بيع دولار</label>
+                                <input id="inp-aden-usd-sell" type="number" step="any" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-yellow-500">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex gap-3">
+                    <button id="save-btn" onclick="saveRates()" class="flex-grow bg-yellow-500 hover:bg-yellow-600 text-slate-950 font-bold py-2.5 rounded-xl transition-all duration-200">
+                        حفظ الأسعار الجديدة
+                    </button>
+                    <button onclick="closeAdminModal()" class="bg-slate-850 hover:bg-slate-800 border border-slate-700 text-slate-300 px-4 py-2.5 rounded-xl transition-all duration-200">
+                        إلغاء
+                    </button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Footer -->
     <footer class="border-t border-slate-800 bg-slate-950 py-6 mt-12 text-center text-xs text-slate-500">
         <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <p>© 2026 منصة العرش لأسعار الصرف. جميع الحقوق محفوظة.</p>
-            <p class="flex items-center gap-1.5">
-                تطوير بأحدث التقنيات السحابية ومربوط بـ <span class="text-emerald-400 font-bold">Supabase</span>
-            </p>
+            <button onclick="openAdmin()" class="text-slate-700 hover:text-yellow-500/50 transition-colors duration-200 flex items-center gap-1">
+                <i class="fa-solid fa-lock text-[10px]"></i> إدارة المنصة
+            </button>
         </div>
     </footer>
 
     <!-- Supabase Integration Script -->
     <script>
-        // إعداد بيانات الاتصال بـ Supabase المستخرجة من حسابك بدقة
         const SUPABASE_URL = "https://tmroykbcxddwbiufczea.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtcm95a2JjeGRkd2JpdWZjemVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0NjI0MDYsImV4cCI6MjA2NDAzODQwNn0.2Y4pE6-wHle_8fINR_f8_p8fINR_fI_8f_f_ZVm_8fIN_8fINR_f_f_8f_y_ynTRfoVf";
         
-        // تهيئة اتصال العميل بـ Supabase
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let rawData = [];
 
         async function fetchRates() {
             const refreshBtn = document.getElementById('refresh-btn');
             const refreshIcon = document.getElementById('refresh-icon');
             const errorCard = document.getElementById('error-card');
             
-            // تشغيل تأثير جاري التحميل والدوران للزر
             refreshBtn.disabled = true;
             refreshIcon.classList.add('fa-spin');
             errorCard.classList.add('hidden');
 
             try {
-                // جلب البيانات من جدول rates
-                const { data, error } = await supabase
-                    .from('rates')
-                    .select('*');
-
+                const { data, error } = await supabase.from('rates').select('*');
                 if (error) throw error;
 
-                if (data && data.length > 0) {
+                rawData = data || [];
+
+                if (rawData.length > 0) {
                     let latestUpdateTime = null;
 
-                    data.forEach(row => {
+                    rawData.forEach(row => {
                         const city = row.city.trim();
                         
-                        // تحديث أسعار صنعاء
                         if (city === 'صنعاء' || city === 'Sanaa') {
                             document.getElementById('sanaa-sar-buy').innerText = parseFloat(row.sar_buy).toLocaleString('ar-YE');
                             document.getElementById('sanaa-sar-sell').innerText = parseFloat(row.sar_sell).toLocaleString('ar-YE');
                             document.getElementById('sanaa-usd-buy').innerText = parseFloat(row.usd_buy).toLocaleString('ar-YE');
                             document.getElementById('sanaa-usd-sell').innerText = parseFloat(row.usd_sell).toLocaleString('ar-YE');
+                            
+                            document.getElementById('inp-sanaa-sar-buy').value = row.sar_buy;
+                            document.getElementById('inp-sanaa-sar-sell').value = row.sar_sell;
+                            document.getElementById('inp-sanaa-usd-buy').value = row.usd_buy;
+                            document.getElementById('inp-sanaa-usd-sell').value = row.usd_sell;
+
                             latestUpdateTime = new Date(row.updated_at);
                         }
-                        // تحديث أسعار عدن
                         else if (city === 'عدن' || city === 'Aden') {
                             document.getElementById('aden-sar-buy').innerText = parseFloat(row.sar_buy).toLocaleString('ar-YE');
                             document.getElementById('aden-sar-sell').innerText = parseFloat(row.sar_sell).toLocaleString('ar-YE');
                             document.getElementById('aden-usd-buy').innerText = parseFloat(row.usd_buy).toLocaleString('ar-YE');
                             document.getElementById('aden-usd-sell').innerText = parseFloat(row.usd_sell).toLocaleString('ar-YE');
+
+                            document.getElementById('inp-aden-sar-buy').value = row.sar_buy;
+                            document.getElementById('inp-aden-sar-sell').value = row.sar_sell;
+                            document.getElementById('inp-aden-usd-buy').value = row.usd_buy;
+                            document.getElementById('inp-aden-usd-sell').value = row.usd_sell;
+
                             if (!latestUpdateTime || new Date(row.updated_at) > latestUpdateTime) {
                                 latestUpdateTime = new Date(row.updated_at);
                             }
                         }
                     });
 
-                    // تحديث وقت آخر تحديث بشكل مقروء وجميل باللغة العربية
                     if (latestUpdateTime) {
                         const options = { 
-                            hour: '2-digit', 
-                            minute: '2-digit', 
-                            second: '2-digit',
-                            day: 'numeric', 
-                            month: 'long', 
-                            year: 'numeric',
+                            hour: '2-digit', minute: '2-digit', second: '2-digit',
+                            day: 'numeric', month: 'long', year: 'numeric',
                             timeZone: 'Asia/Aden'
                         };
                         document.getElementById('last-updated').innerText = latestUpdateTime.toLocaleDateString('ar-YE', options);
@@ -294,11 +365,10 @@
                     document.getElementById('last-updated').innerText = "لا توجد أسعار مدخلة حالياً";
                 }
             } catch (err) {
-                console.error("خطأ في جلب البيانات:", err);
+                console.error(err);
                 errorCard.classList.remove('hidden');
                 document.getElementById('last-updated').innerText = "فشل التحديث";
             } finally {
-                // إيقاف تأثير الدوران وتفعيل الزر مجدداً
                 setTimeout(() => {
                     refreshBtn.disabled = false;
                     refreshIcon.classList.remove('fa-spin');
@@ -306,8 +376,69 @@
             }
         }
 
-        // جلب الأسعار فور تحميل الصفحة لأول مرة
+        // دوال لوحة التحكم السرية
+        function openAdmin() {
+            const password = prompt("الرجاء إدخال كلمة المرور السحرية للوصول للوحة التحكم:");
+            if (password === "1234") {
+                document.getElementById('admin-modal').style.display = 'flex';
+            } else if (password !== null) {
+                alert("كلمة المرور خاطئة!");
+            }
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').style.display = 'none';
+        }
+
+        async function saveRates() {
+            const saveBtn = document.getElementById('save-btn');
+            saveBtn.disabled = true;
+            saveBtn.innerText = "جاري الحفظ والرفع...";
+
+            try {
+                const now = new Date().toISOString();
+
+                // 1. تحديث أسعار صنعاء
+                const { error: errorSanaa } = await supabase
+                    .from('rates')
+                    .update({
+                        sar_buy: parseFloat(document.getElementById('inp-sanaa-sar-buy').value),
+                        sar_sell: parseFloat(document.getElementById('inp-sanaa-sar-sell').value),
+                        usd_buy: parseFloat(document.getElementById('inp-sanaa-usd-buy').value),
+                        usd_sell: parseFloat(document.getElementById('inp-sanaa-usd-sell').value),
+                        updated_at: now
+                    })
+                    .or('city.eq.صنعاء,city.eq.Sanaa');
+
+                if (errorSanaa) throw errorSanaa;
+
+                // 2. تحديث أسعار عدن
+                const { error: errorAden } = await supabase
+                    .from('rates')
+                    .update({
+                        sar_buy: parseFloat(document.getElementById('inp-aden-sar-buy').value),
+                        sar_sell: parseFloat(document.getElementById('inp-aden-sar-sell').value),
+                        usd_buy: parseFloat(document.getElementById('inp-aden-usd-buy').value),
+                        usd_sell: parseFloat(document.getElementById('inp-aden-usd-sell').value),
+                        updated_at: now
+                    })
+                    .or('city.eq.عدن,city.eq.Aden');
+
+                if (errorAden) throw errorAden;
+
+                alert("تم تحديث أسعار الصرف وحفظها في قاعدة البيانات بنجاح! 🎉");
+                closeAdminModal();
+                fetchRates(); // تحديث فوري للواجهة
+            } catch (err) {
+                console.error(err);
+                alert("حدث خطأ أثناء الحفظ: " + err.message);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerText = "حفظ الأسعار الجديدة";
+            }
+        }
+
         window.onload = fetchRates;
     </script>
 </body>
-                    </html>
+    </html>
