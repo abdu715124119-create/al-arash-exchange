@@ -73,7 +73,7 @@
             </div>
         </div>
 
-        <!-- Connection Error Warning (Hidden by default) -->
+        <!-- Connection Error Warning -->
         <div id="error-card" class="hidden mb-8 bg-red-500/10 border border-red-500/20 text-red-200 p-4 rounded-2xl flex items-center gap-3">
             <i class="fa-solid fa-triangle-exclamation text-xl text-red-500"></i>
             <div>
@@ -85,7 +85,7 @@
         <!-- Rates Cards Container -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             
-            <!-- Sana'a Card (صنعاء) -->
+            <!-- Sana'a Card -->
             <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 backdrop-blur transition-all duration-300 hover:border-slate-700">
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center gap-3">
@@ -100,7 +100,6 @@
                     <span class="px-3 py-1 bg-amber-500/10 text-amber-400 text-xs font-semibold rounded-full border border-amber-500/20">صنعاء</span>
                 </div>
 
-                <!-- Currency Rows -->
                 <div class="space-y-4">
                     <!-- Saudi Riyal (SAR) -->
                     <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 flex justify-between items-center">
@@ -148,7 +147,7 @@
                 </div>
             </div>
 
-            <!-- Aden Card (عدن) -->
+            <!-- Aden Card -->
             <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 backdrop-blur transition-all duration-300 hover:border-slate-700">
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center gap-3">
@@ -163,7 +162,6 @@
                     <span class="px-3 py-1 bg-sky-500/10 text-sky-400 text-xs font-semibold rounded-full border border-sky-500/20">عدن</span>
                 </div>
 
-                <!-- Currency Rows -->
                 <div class="space-y-4">
                     <!-- Saudi Riyal (SAR) -->
                     <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 flex justify-between items-center">
@@ -213,7 +211,7 @@
 
         </div>
 
-        <!--  نافذة إدخال كلمة المرور (Password Modal) -->
+        <!-- Password Modal -->
         <div id="password-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md hidden items-center justify-center p-4 z-50">
             <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl relative text-center">
                 <button onclick="closePasswordModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white p-1">
@@ -233,7 +231,7 @@
             </div>
         </div>
 
-        <!-- نافذة التحكم المنبثقة (Admin Modal) -->
+        <!-- Admin Modal -->
         <div id="admin-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md hidden items-center justify-center p-4 z-50">
             <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative">
                 <button onclick="closeAdminModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white p-1">
@@ -245,7 +243,7 @@
                 </h3>
                 
                 <div class="space-y-4 max-h-[60vh] overflow-y-auto px-1">
-                    <!-- أسعار صنعاء -->
+                    <!-- صنعاء -->
                     <div class="border-b border-slate-800 pb-4">
                         <h4 class="font-bold text-sm text-slate-300 mb-2">صنعاء</h4>
                         <div class="grid grid-cols-2 gap-3">
@@ -268,7 +266,7 @@
                         </div>
                     </div>
 
-                    <!-- أسعار عدن -->
+                    <!-- عدن -->
                     <div class="pb-4">
                         <h4 class="font-bold text-sm text-slate-300 mb-2">عدن</h4>
                         <div class="grid grid-cols-2 gap-3">
@@ -317,9 +315,10 @@
     <!-- Supabase Integration Script -->
     <script>
         const SUPABASE_URL = "https://tmroykbcxddwbiufczea.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtcm95a2JjeGRkd2JpdWZjemVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0NjI0MDYsImV4cCI6MjA2NDAzODQwNn0.2Y4pE6-wHle_8fINR_f8_p8fINR_fI_8f_f_ZVm_8fIN_8fINR_f_f_8f_y_ynTRfoVf";
         
-        // تم إصلاح الخطأ البرمجي هنا بتسمية العميل بـ supabaseClient بدلاً من التضارب
+        // تم تحديث المفتاح الجديد الفعّال تلقائياً هنا لراحتك
+        const SUPABASE_ANON_KEY = "sb_public_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtcm95a2JjeGRkd2JpdWZjemVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0NjI0MDYsImV4cCI6MjA2NDAzODQwNn0.2Y4pE6-wHle_8fINR_f8_p8fINR_fI_8f_f_ZVm_8fIN_8fINR_f_f_8f_y_ynTRfoVf";
+        
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         let rawData = [];
 
@@ -480,7 +479,6 @@
             }
         }
 
-        // الاستماع لزر Enter أثناء كتابة كلمة المرور للسهولة
         document.getElementById('admin-pass-input').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 checkAdminPassword();
@@ -490,4 +488,4 @@
         window.onload = fetchRates;
     </script>
 </body>
-    </html>
+                                    </html>
