@@ -1,2 +1,2 @@
-# al-arash-exchange.
+# al-arash-exchange
 اسعار الصرف اول باول 
