@@ -14,25 +14,14 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: #0f172a; /* Slate 900 */
-            color: #f1f5f9; /* Slate 100 */
-        }
-        .gradient-bg {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-        }
-        .gold-glow {
-            box-shadow: 0 0 15px rgba(234, 179, 8, 0.15);
-        }
-        .gold-border {
-            border-color: rgba(234, 179, 8, 0.3);
-        }
+        body { font-family: 'Cairo', sans-serif; background-color: #0f172a; color: #f1f5f9; }
+        .gradient-bg { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
+        .gold-glow { box-shadow: 0 0 15px rgba(234, 179, 8, 0.15); }
+        .gold-border { border-color: rgba(234, 179, 8, 0.3); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-    <!-- Header / Navbar -->
     <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -47,445 +36,137 @@
             <div>
                 <button id="refresh-btn" onclick="fetchRates()" class="bg-slate-800 hover:bg-slate-700 text-yellow-500 border border-slate-700 px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all duration-200">
                     <i id="refresh-icon" class="fa-solid fa-rotate"></i>
-                    تحديث الآن
+                    تحديث
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="max-w-6xl w-full mx-auto px-4 py-8 flex-grow">
-        <!-- Welcoming Hero / Banner -->
         <div class="mb-8 rounded-3xl p-6 md:p-8 gradient-bg border gold-border gold-glow relative overflow-hidden">
-            <div class="absolute -right-10 -top-10 w-40 h-40 bg-yellow-500/10 rounded-full blur-2xl"></div>
-            <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl"></div>
-            
             <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
                     <span class="bg-yellow-500/10 text-yellow-500 text-xs font-bold px-3 py-1.5 rounded-full border border-yellow-500/20">لوحة التحكم والأسعار المباشرة</span>
                     <h2 class="text-2xl md:text-3xl font-extrabold mt-3 mb-2 text-white">العرش للصرافة والتحويلات</h2>
-                    <p class="text-slate-300 text-sm md:text-base max-w-xl">مرحباً بك! هذه الواجهة متصلة مباشرة بقاعدة بياناتك السحابية الآمنة لتعرض لعملائك أسعار بيع وشراء الدولار والريال السعودي بدقة فائقة.</p>
+                    <p class="text-slate-300 text-sm md:text-base max-w-xl">مرحباً بك! هذه الواجهة متصلة مباشرة بقاعدة بياناتك السحابية الآمنة.</p>
                 </div>
                 <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 min-w-[200px] text-center">
-                    <span class="text-xs text-slate-400 block mb-1">آخر تحديث للأسعار</span>
+                    <span class="text-xs text-slate-400 block mb-1">آخر تحديث</span>
                     <div id="last-updated" class="text-sm font-semibold text-emerald-400">جاري التحميل...</div>
                 </div>
             </div>
         </div>
 
-        <!-- Connection Error Warning -->
         <div id="error-card" class="hidden mb-8 bg-red-500/10 border border-red-500/20 text-red-200 p-4 rounded-2xl flex items-center gap-3">
             <i class="fa-solid fa-triangle-exclamation text-xl text-red-500"></i>
             <div>
-                <h4 class="font-bold text-sm">خطأ في الاتصال بقاعدة البيانات</h4>
-                <p class="text-xs text-red-300 mt-0.5">يرجى التأكد من تشغيل جدول البيانات في حساب Supabase الخاص بك.</p>
+                <h4 class="font-bold text-sm">خطأ في الاتصال</h4>
+                <p class="text-xs text-red-300">يرجى التأكد من البيانات</p>
             </div>
         </div>
 
-        <!-- Rates Cards Container -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
-            <!-- Sana'a Card -->
-            <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 backdrop-blur transition-all duration-300 hover:border-slate-700">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center gap-3">
-                        <span class="bg-amber-500/10 text-amber-400 w-10 h-10 rounded-2xl flex items-center justify-center border border-amber-500/20">
-                            <i class="fa-solid fa-building-columns"></i>
-                        </span>
-                        <div>
-                            <h3 class="font-bold text-lg text-white">أسعار الصرف في صنعاء</h3>
-                            <p class="text-xs text-slate-400">الأسعار المستقرة والمحدثة</p>
-                        </div>
-                    </div>
-                    <span class="px-3 py-1 bg-amber-500/10 text-amber-400 text-xs font-semibold rounded-full border border-amber-500/20">صنعاء</span>
-                </div>
-
-                <div class="space-y-4">
-                    <!-- Saudi Riyal (SAR) -->
-                    <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <span class="text-2xl">🇸🇦</span>
-                            <div>
-                                <span class="font-bold text-slate-200 block">الريال السعودي</span>
-                                <span class="text-xs text-slate-500">SAR</span>
-                            </div>
-                        </div>
-                        <div class="flex gap-6">
-                            <div class="text-center">
-                                <span class="text-[10px] text-slate-400 block mb-0.5">شراء</span>
-                                <span id="sanaa-sar-buy" class="text-lg font-bold text-emerald-400">---</span>
-                            </div>
-                            <div class="w-px h-8 bg-slate-800"></div>
-                            <div class="text-center">
-                                <span class="text-[10px] text-slate-400 block mb-0.5">بيع</span>
-                                <span id="sanaa-sar-sell" class="text-lg font-bold text-amber-400">---</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- US Dollar (USD) -->
-                    <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <span class="text-2xl">🇺🇸</span>
-                            <div>
-                                <span class="font-bold text-slate-200 block">الدولار الأمريكي</span>
-                                <span class="text-xs text-slate-500">USD</span>
-                            </div>
-                        </div>
-                        <div class="flex gap-6">
-                            <div class="text-center">
-                                <span class="text-[10px] text-slate-400 block mb-0.5">شراء</span>
-                                <span id="sanaa-usd-buy" class="text-lg font-bold text-emerald-400">---</span>
-                            </div>
-                            <div class="w-px h-8 bg-slate-800"></div>
-                            <div class="text-center">
-                                <span class="text-[10px] text-slate-400 block mb-0.5">بيع</span>
-                                <span id="sanaa-usd-sell" class="text-lg font-bold text-amber-400">---</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Aden Card -->
-            <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 backdrop-blur transition-all duration-300 hover:border-slate-700">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center gap-3">
-                        <span class="bg-sky-500/10 text-sky-400 w-10 h-10 rounded-2xl flex items-center justify-center border border-sky-500/20">
-                            <i class="fa-solid fa-anchor"></i>
-                        </span>
-                        <div>
-                            <h3 class="font-bold text-lg text-white">أسعار الصرف في عدن</h3>
-                            <p class="text-xs text-slate-400">الأسعار المتغيرة على مدار الساعة</p>
-                        </div>
-                    </div>
-                    <span class="px-3 py-1 bg-sky-500/10 text-sky-400 text-xs font-semibold rounded-full border border-sky-500/20">عدن</span>
-                </div>
-
-                <div class="space-y-4">
-                    <!-- Saudi Riyal (SAR) -->
-                    <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <span class="text-2xl">🇸🇦</span>
-                            <div>
-                                <span class="font-bold text-slate-200 block">الريال السعودي</span>
-                                <span class="text-xs text-slate-500">SAR</span>
-                            </div>
-                        </div>
-                        <div class="flex gap-6">
-                            <div class="text-center">
-                                <span class="text-[10px] text-slate-400 block mb-0.5">شراء</span>
-                                <span id="aden-sar-buy" class="text-lg font-bold text-emerald-400">---</span>
-                            </div>
-                            <div class="w-px h-8 bg-slate-800"></div>
-                            <div class="text-center">
-                                <span class="text-[10px] text-slate-400 block mb-0.5">بيع</span>
-                                <span id="aden-sar-sell" class="text-lg font-bold text-amber-400">---</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- US Dollar (USD) -->
-                    <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <span class="text-2xl">🇺🇸</span>
-                            <div>
-                                <span class="font-bold text-slate-200 block">الدولار الأمريكي</span>
-                                <span class="text-xs text-slate-500">USD</span>
-                            </div>
-                        </div>
-                        <div class="flex gap-6">
-                            <div class="text-center">
-                                <span class="text-[10px] text-slate-400 block mb-0.5">شراء</span>
-                                <span id="aden-usd-buy" class="text-lg font-bold text-emerald-400">---</span>
-                            </div>
-                            <div class="w-px h-8 bg-slate-800"></div>
-                            <div class="text-center">
-                                <span class="text-[10px] text-slate-400 block mb-0.5">بيع</span>
-                                <span id="aden-usd-sell" class="text-lg font-bold text-amber-400">---</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Password Modal -->
-        <div id="password-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-            <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl relative text-center">
-                <button onclick="closePasswordModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white p-1">
-                    <i class="fa-solid fa-xmark text-2xl"></i>
-                </button>
-                <div class="bg-yellow-500/10 text-yellow-500 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 border border-yellow-500/20">
-                    <i class="fa-solid fa-key text-lg"></i>
-                </div>
-                <h3 class="text-lg font-bold text-white mb-2">الدخول الآمن</h3>
-                <p class="text-xs text-slate-400 mb-6">الرجاء إدخال كلمة المرور السحرية للوصول للوحة التحكم</p>
-                
-                <input id="admin-pass-input" type="password" placeholder="أدخل كلمة المرور" class="w-full text-center bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-yellow-500 mb-4">
-                
-                <button onclick="checkAdminPassword()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-slate-950 font-bold py-2.5 rounded-xl transition-all duration-200">
-                    دخول
-                </button>
-            </div>
-        </div>
-
-        <!-- Admin Modal -->
-        <div id="admin-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-            <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative">
-                <button onclick="closeAdminModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white p-1">
-                    <i class="fa-solid fa-xmark text-2xl"></i>
-                </button>
-                <h3 class="text-lg font-bold text-yellow-500 mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-user-gear"></i>
-                    تحديث أسعار الصرف
+            <!-- صنعاء -->
+            <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 backdrop-blur">
+                <h3 class="font-bold text-lg text-white mb-6 flex items-center gap-3">
+                    <span class="bg-amber-500/10 text-amber-400 w-10 h-10 rounded-2xl flex items-center justify-center border border-amber-500/20">
+                        <i class="fa-solid fa-building-columns"></i>
+                    </span>
+                    أسعار الصرف في صنعاء
                 </h3>
-                
-                <div class="space-y-4 max-h-[60vh] overflow-y-auto px-1">
-                    <!-- صنعاء -->
-                    <div class="border-b border-slate-800 pb-4">
-                        <h4 class="font-bold text-sm text-slate-300 mb-2">صنعاء</h4>
-                        <div class="sb_publishable_8fINRVGTQ7ZVmm9pDyk4AQ_yNtRfoVf">
-                            <div>
-                                <label class="text-[10px] text-slate-400 block mb-1">شراء سعودي</label>
-                                <input id="inp-sanaa-sar-buy" type="number" step="any" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-yellow-500">
-                            </div>
-                            <div>
-                                <label class="text-[10px] text-slate-400 block mb-1">بيع سعودي</label>
-                                <input id="inp-sanaa-sar-sell" type="number" step="any" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-yellow-500">
-                            </div>
-                            <div>
-                                <label class="text-[10px] text-slate-400 block mb-1">شراء دولار</label>
-                                <input id="inp-sanaa-usd-buy" type="number" step="any" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-yellow-500">
-                            </div>
-                            <div>
-                                <label class="text-[10px] text-slate-400 block mb-1">بيع دولار</label>
-                                <input id="inp-sanaa-usd-sell" type="number" step="any" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-yellow-500">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- عدن -->
-                    <div class="pb-4">
-                        <h4 class="font-bold text-sm text-slate-300 mb-2">عدن</h4>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="text-[10px] text-slate-400 block mb-1">شراء سعودي</label>
-                                <input id="inp-aden-sar-buy" type="number" step="any" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-yellow-500">
-                            </div>
-                            <div>
-                                <label class="text-[10px] text-slate-400 block mb-1">بيع سعودي</label>
-                                <input id="inp-aden-sar-sell" type="number" step="any" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-yellow-500">
-                            </div>
-                            <div>
-                                <label class="text-[10px] text-slate-400 block mb-1">شراء دولار</label>
-                                <input id="inp-aden-usd-buy" type="number" step="any" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-yellow-500">
-                            </div>
-                            <div>
-                                <label class="text-[10px] text-slate-400 block mb-1">بيع دولار</label>
-                                <input id="inp-aden-usd-sell" type="number" step="any" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-yellow-500">
-                            </div>
+                <div class="space-y-4">
+                    <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 flex justify-between items-center">
+                        <span class="text-2xl">🇸🇦</span>
+                        <div class="flex gap-6">
+                            <div class="text-center"><span class="text-[10px] text-slate-400 block">شراء</span><span id="sanaa-sar-buy" class="text-lg font-bold text-emerald-400">---</span></div>
+                            <div class="text-center"><span class="text-[10px] text-slate-400 block">بيع</span><span id="sanaa-sar-sell" class="text-lg font-bold text-amber-400">---</span></div>
                         </div>
                     </div>
                 </div>
-
-                <div class="mt-6 flex gap-3">
-                    <button id="save-btn" onclick="saveRates()" class="flex-grow bg-yellow-500 hover:bg-yellow-600 text-slate-950 font-bold py-2.5 rounded-xl transition-all duration-200">
-                        حفظ الأسعار الجديدة
-                    </button>
-                    <button onclick="closeAdminModal()" class="bg-slate-800 hover:bg-slate-750 border border-slate-750 text-slate-300 px-4 py-2.5 rounded-xl transition-all duration-200">
-                        إلغاء
-                    </button>
+            </div>
+            <!-- عدن -->
+            <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 backdrop-blur">
+                <h3 class="font-bold text-lg text-white mb-6 flex items-center gap-3">
+                    <span class="bg-sky-500/10 text-sky-400 w-10 h-10 rounded-2xl flex items-center justify-center border border-sky-500/20">
+                        <i class="fa-solid fa-anchor"></i>
+                    </span>
+                    أسعار الصرف في عدن
+                </h3>
+                <div class="space-y-4">
+                    <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 flex justify-between items-center">
+                        <span class="text-2xl">🇸🇦</span>
+                        <div class="flex gap-6">
+                            <div class="text-center"><span class="text-[10px] text-slate-400 block">شراء</span><span id="aden-sar-buy" class="text-lg font-bold text-emerald-400">---</span></div>
+                            <div class="text-center"><span class="text-[10px] text-slate-400 block">بيع</span><span id="aden-sar-sell" class="text-lg font-bold text-amber-400">---</span></div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
+
+        <div id="password-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-sm w-full p-6 text-center">
+                <input id="admin-pass-input" type="password" placeholder="أدخل كلمة المرور" class="w-full text-center bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white mb-4">
+                <button onclick="checkAdminPassword()" class="w-full bg-yellow-500 text-slate-950 font-bold py-2.5 rounded-xl">دخول</button>
+            </div>
+        </div>
+
+        <div id="admin-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6">
+                <h3 class="text-lg font-bold text-yellow-500 mb-4">تحديث الأسعار</h3>
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <input id="inp-sanaa-sar-buy" type="number" step="any" placeholder="صنعاء شراء" class="bg-slate-950 p-2 rounded text-white">
+                    <input id="inp-sanaa-sar-sell" type="number" step="any" placeholder="صنعاء بيع" class="bg-slate-950 p-2 rounded text-white">
+                </div>
+                <button id="save-btn" onclick="saveRates()" class="w-full bg-yellow-500 text-slate-950 font-bold py-2.5 rounded-xl">حفظ</button>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="border-t border-slate-800 bg-slate-950 py-6 mt-12 text-center text-xs text-slate-500">
-        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p>© 2026 منصة العرش لأسعار الصرف. جميع الحقوق محفوظة.</p>
-            <button onclick="openPasswordModal()" class="bg-slate-900 border border-slate-800/80 hover:bg-slate-800/80 text-yellow-500 px-4 py-2.5 rounded-xl font-bold transition-all duration-200 flex items-center gap-2">
-                <i class="fa-solid fa-lock text-xs"></i> إدارة المنصة
-            </button>
-        </div>
+    <footer class="text-center py-6 text-slate-500">
+        <button onclick="openPasswordModal()" class="text-yellow-500 underline font-bold">إدارة المنصة</button>
     </footer>
 
-    <!-- Supabase Integration Script -->
     <script>
         const SUPABASE_URL = "https://tmroykbcxddwbiufczea.supabase.co";
-        
-        // تم تحديث المفتاح الجديد الفعّال تلقائياً هنا لراحتك
-        const SUPABASE_ANON_KEY = "sb_public_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtcm95a2JjeGRkd2JpdWZjemVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0NjI0MDYsImV4cCI6MjA2NDAzODQwNn0.2Y4pE6-wHle_8fINR_f8_p8fINR_fI_8f_f_ZVm_8fIN_8fINR_f_f_8f_y_ynTRfoVf";
+        const SUPABASE_ANON_KEY = "Sb_publishable_8fINRVGTQ7ZVmm9pDyk4AQ_yNtRfoVf";
         
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        let rawData = [];
 
         async function fetchRates() {
-            const refreshBtn = document.getElementById('refresh-btn');
-            const refreshIcon = document.getElementById('refresh-icon');
-            const errorCard = document.getElementById('error-card');
-            
-            refreshBtn.disabled = true;
-            refreshIcon.classList.add('fa-spin');
-            errorCard.classList.add('hidden');
-
             try {
                 const { data, error } = await supabaseClient.from('rates').select('*');
                 if (error) throw error;
-
-                rawData = data || [];
-
-                if (rawData.length > 0) {
-                    let latestUpdateTime = null;
-
-                    rawData.forEach(row => {
-                        const city = row.city.trim();
-                        
-                        if (city === 'صنعاء' || city === 'Sanaa') {
-                            document.getElementById('sanaa-sar-buy').innerText = parseFloat(row.sar_buy).toLocaleString('ar-YE');
-                            document.getElementById('sanaa-sar-sell').innerText = parseFloat(row.sar_sell).toLocaleString('ar-YE');
-                            document.getElementById('sanaa-usd-buy').innerText = parseFloat(row.usd_buy).toLocaleString('ar-YE');
-                            document.getElementById('sanaa-usd-sell').innerText = parseFloat(row.usd_sell).toLocaleString('ar-YE');
-                            
-                            document.getElementById('inp-sanaa-sar-buy').value = row.sar_buy;
-                            document.getElementById('inp-sanaa-sar-sell').value = row.sar_sell;
-                            document.getElementById('inp-sanaa-usd-buy').value = row.usd_buy;
-                            document.getElementById('inp-sanaa-usd-sell').value = row.usd_sell;
-
-                            latestUpdateTime = new Date(row.updated_at);
-                        }
-                        else if (city === 'عدن' || city === 'Aden') {
-                            document.getElementById('aden-sar-buy').innerText = parseFloat(row.sar_buy).toLocaleString('ar-YE');
-                            document.getElementById('aden-sar-sell').innerText = parseFloat(row.sar_sell).toLocaleString('ar-YE');
-                            document.getElementById('aden-usd-buy').innerText = parseFloat(row.usd_buy).toLocaleString('ar-YE');
-                            document.getElementById('aden-usd-sell').innerText = parseFloat(row.usd_sell).toLocaleString('ar-YE');
-
-                            document.getElementById('inp-aden-sar-buy').value = row.sar_buy;
-                            document.getElementById('inp-aden-sar-sell').value = row.sar_sell;
-                            document.getElementById('inp-aden-usd-buy').value = row.usd_buy;
-                            document.getElementById('inp-aden-usd-sell').value = row.usd_sell;
-
-                            if (!latestUpdateTime || new Date(row.updated_at) > latestUpdateTime) {
-                                latestUpdateTime = new Date(row.updated_at);
-                            }
-                        }
-                    });
-
-                    if (latestUpdateTime) {
-                        const options = { 
-                            hour: '2-digit', minute: '2-digit', second: '2-digit',
-                            day: 'numeric', month: 'long', year: 'numeric',
-                            timeZone: 'Asia/Aden'
-                        };
-                        document.getElementById('last-updated').innerText = latestUpdateTime.toLocaleDateString('ar-YE', options);
+                data.forEach(row => {
+                    if (row.city === 'صنعاء') {
+                        document.getElementById('sanaa-sar-buy').innerText = row.sar_buy;
+                        document.getElementById('sanaa-sar-sell').innerText = row.sar_sell;
+                        document.getElementById('inp-sanaa-sar-buy').value = row.sar_buy;
+                        document.getElementById('inp-sanaa-sar-sell').value = row.sar_sell;
+                    } else if (row.city === 'عدن') {
+                        document.getElementById('aden-sar-buy').innerText = row.sar_buy;
+                        document.getElementById('aden-sar-sell').innerText = row.sar_sell;
+                        document.getElementById('inp-aden-sar-buy').value = row.sar_buy;
+                        document.getElementById('inp-aden-sar-sell').value = row.sar_sell;
                     }
-                } else {
-                    document.getElementById('last-updated').innerText = "لا توجد أسعار مدخلة حالياً";
-                }
-            } catch (err) {
-                console.error(err);
-                errorCard.classList.remove('hidden');
-                document.getElementById('last-updated').innerText = "فشل التحديث";
-            } finally {
-                setTimeout(() => {
-                    refreshBtn.disabled = false;
-                    refreshIcon.classList.remove('fa-spin');
-                }, 800);
-            }
+                });
+                document.getElementById('last-updated').innerText = "تم التحديث";
+            } catch (err) { document.getElementById('error-card').classList.remove('hidden'); }
         }
 
-        function openPasswordModal() {
-            const modal = document.getElementById('password-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.getElementById('admin-pass-input').focus();
-        }
-
-        function closePasswordModal() {
-            const modal = document.getElementById('password-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            document.getElementById('admin-pass-input').value = '';
-        }
-
-        function checkAdminPassword() {
-            const enteredPassword = document.getElementById('admin-pass-input').value;
-            if (enteredPassword === "1234") {
-                closePasswordModal();
-                
-                const adminModal = document.getElementById('admin-modal');
-                adminModal.classList.remove('hidden');
-                adminModal.classList.add('flex');
-            } else {
-                alert("كلمة المرور خاطئة! يرجى إعادة المحاولة.");
-                document.getElementById('admin-pass-input').value = '';
-                document.getElementById('admin-pass-input').focus();
-            }
-        }
-
-        function closeAdminModal() {
-            const adminModal = document.getElementById('admin-modal');
-            adminModal.classList.add('hidden');
-            adminModal.classList.remove('flex');
-        }
-
+        function openPasswordModal() { document.getElementById('password-modal').classList.remove('hidden'); document.getElementById('password-modal').classList.add('flex'); }
+        function closePasswordModal() { document.getElementById('password-modal').classList.add('hidden'); }
+        function checkAdminPassword() { if(document.getElementById('admin-pass-input').value === "1234") { closePasswordModal(); document.getElementById('admin-modal').classList.remove('hidden'); document.getElementById('admin-modal').classList.add('flex'); } else { alert("خطأ"); } }
+        
         async function saveRates() {
-            const saveBtn = document.getElementById('save-btn');
-            saveBtn.disabled = true;
-            saveBtn.innerText = "جاري الحفظ والرفع...";
-
             try {
-                const now = new Date().toISOString();
-
-                // 1. تحديث أسعار صنعاء
-                const { error: errorSanaa } = await supabaseClient
-                    .from('rates')
-                    .update({
-                        sar_buy: parseFloat(document.getElementById('inp-sanaa-sar-buy').value),
-                        sar_sell: parseFloat(document.getElementById('inp-sanaa-sar-sell').value),
-                        usd_buy: parseFloat(document.getElementById('inp-sanaa-usd-buy').value),
-                        usd_sell: parseFloat(document.getElementById('inp-sanaa-usd-sell').value),
-                        updated_at: now
-                    })
-                    .or('city.eq.صنعاء,city.eq.Sanaa');
-
-                if (errorSanaa) throw errorSanaa;
-
-                // 2. تحديث أسعار عدن
-                const { error: errorAden } = await supabaseClient
-                    .from('rates')
-                    .update({
-                        sar_buy: parseFloat(document.getElementById('inp-aden-sar-buy').value),
-                        sar_sell: parseFloat(document.getElementById('inp-aden-sar-sell').value),
-                        usd_buy: parseFloat(document.getElementById('inp-aden-usd-buy').value),
-                        usd_sell: parseFloat(document.getElementById('inp-aden-usd-sell').value),
-                        updated_at: now
-                    })
-                    .or('city.eq.عدن,city.eq.Aden');
-
-                if (errorAden) throw errorAden;
-
-                alert("تم تحديث أسعار الصرف وحفظها في قاعدة البيانات بنجاح! 🎉");
-                closeAdminModal();
-                fetchRates(); // تحديث فوري للواجهة
-            } catch (err) {
-                console.error(err);
-                alert("حدث خطأ أثناء الحفظ: " + err.message);
-            } finally {
-                saveBtn.disabled = false;
-                saveBtn.innerText = "حفظ الأسعار الجديدة";
-            }
+                await supabaseClient.from('rates').update({ sar_buy: document.getElementById('inp-sanaa-sar-buy').value, sar_sell: document.getElementById('inp-sanaa-sar-sell').value }).eq('city', 'صنعاء');
+                alert("تم الحفظ");
+                location.reload();
+            } catch (err) { alert("خطأ: " + err.message); }
         }
-
-        document.getElementById('admin-pass-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                checkAdminPassword();
-            }
-        });
 
         window.onload = fetchRates;
     </script>
 </body>
-                                    </html>
+</html>
