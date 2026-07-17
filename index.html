@@ -4,15 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة العرش لأسعار الصرف</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Cairo -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <style>
         body { font-family: 'Cairo', sans-serif; background-color: #0f172a; color: #f1f5f9; }
         .gradient-bg { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
@@ -21,7 +16,6 @@
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
-
     <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -34,9 +28,8 @@
                 </div>
             </div>
             <div>
-                <button id="refresh-btn" onclick="fetchRates()" class="bg-slate-800 hover:bg-slate-700 text-yellow-500 border border-slate-700 px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all duration-200">
-                    <i id="refresh-icon" class="fa-solid fa-rotate"></i>
-                    تحديث
+                <button onclick="fetchRates()" class="bg-slate-800 hover:bg-slate-700 text-yellow-500 border border-slate-700 px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2">
+                    <i class="fa-solid fa-rotate"></i> تحديث
                 </button>
             </div>
         </div>
@@ -61,37 +54,28 @@
             <i class="fa-solid fa-triangle-exclamation text-xl text-red-500"></i>
             <div>
                 <h4 class="font-bold text-sm">خطأ في الاتصال</h4>
-                <p class="text-xs text-red-300">يرجى التأكد من البيانات أو تفعيل الأذونات في قاعدة البيانات</p>
+                <p class="text-xs text-red-300">يرجى التحقق من صلاحية مفتاح Anon العام في سوبابيس</p>
             </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <!-- صنعاء -->
-            <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 backdrop-blur">
+            <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-6">
                 <h3 class="font-bold text-lg text-white mb-6 flex items-center gap-3">
                     <span class="bg-amber-500/10 text-amber-400 w-10 h-10 rounded-2xl flex items-center justify-center border border-amber-500/20">
                         <i class="fa-solid fa-building-columns"></i>
-                    </span>
-                    أسعار الصرف في صنعاء
+                    </span> أسعار الصرف في صنعاء
                 </h3>
                 <div class="space-y-4">
-                    <!-- سعودي صنعاء -->
                     <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 flex justify-between items-center">
-                        <div class="flex items-center gap-2">
-                            <span class="text-2xl">🇸🇦</span>
-                            <span class="text-xs text-slate-400">ريال سعودي</span>
-                        </div>
+                        <span class="text-xs text-slate-400">🇸🇦 ريال سعودي</span>
                         <div class="flex gap-6">
                             <div class="text-center"><span class="text-[10px] text-slate-400 block">شراء</span><span id="sanaa-sar-buy" class="text-lg font-bold text-emerald-400">---</span></div>
                             <div class="text-center"><span class="text-[10px] text-slate-400 block">بيع</span><span id="sanaa-sar-sell" class="text-lg font-bold text-amber-400">---</span></div>
                         </div>
                     </div>
-                    <!-- دولار صنعاء -->
                     <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 flex justify-between items-center">
-                        <div class="flex items-center gap-2">
-                            <span class="text-2xl">🇺🇸</span>
-                            <span class="text-xs text-slate-400">دولار أمريكي</span>
-                        </div>
+                        <span class="text-xs text-slate-400">🇺🇸 دولار أمريكي</span>
                         <div class="flex gap-6">
                             <div class="text-center"><span class="text-[10px] text-slate-400 block">شراء</span><span id="sanaa-usd-buy" class="text-lg font-bold text-emerald-400">---</span></div>
                             <div class="text-center"><span class="text-[10px] text-slate-400 block">بيع</span><span id="sanaa-usd-sell" class="text-lg font-bold text-amber-400">---</span></div>
@@ -99,33 +83,24 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- عدن -->
-            <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 backdrop-blur">
+            <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-6">
                 <h3 class="font-bold text-lg text-white mb-6 flex items-center gap-3">
                     <span class="bg-sky-500/10 text-sky-400 w-10 h-10 rounded-2xl flex items-center justify-center border border-sky-500/20">
                         <i class="fa-solid fa-anchor"></i>
-                    </span>
-                    أسعار الصرف في عدن
+                    </span> أسعار الصرف في عدن
                 </h3>
                 <div class="space-y-4">
-                    <!-- سعودي عدن -->
                     <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 flex justify-between items-center">
-                        <div class="flex items-center gap-2">
-                            <span class="text-2xl">🇸🇦</span>
-                            <span class="text-xs text-slate-400">ريال سعودي</span>
-                        </div>
+                        <span class="text-xs text-slate-400">🇸🇦 ريال سعودي</span>
                         <div class="flex gap-6">
                             <div class="text-center"><span class="text-[10px] text-slate-400 block">شراء</span><span id="aden-sar-buy" class="text-lg font-bold text-emerald-400">---</span></div>
                             <div class="text-center"><span class="text-[10px] text-slate-400 block">بيع</span><span id="aden-sar-sell" class="text-lg font-bold text-amber-400">---</span></div>
                         </div>
                     </div>
-                    <!-- دولار عدن -->
                     <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 flex justify-between items-center">
-                        <div class="flex items-center gap-2">
-                            <span class="text-2xl">🇺🇸</span>
-                            <span class="text-xs text-slate-400">دولار أمريكي</span>
-                        </div>
+                        <span class="text-xs text-slate-400">🇺🇸 دولار أمريكي</span>
                         <div class="flex gap-6">
                             <div class="text-center"><span class="text-[10px] text-slate-400 block">شراء</span><span id="aden-usd-buy" class="text-lg font-bold text-emerald-400">---</span></div>
                             <div class="text-center"><span class="text-[10px] text-slate-400 block">بيع</span><span id="aden-usd-sell" class="text-lg font-bold text-amber-400">---</span></div>
@@ -142,7 +117,8 @@
 
     <script>
         const SUPABASE_URL = "https://tmroykbcxddwbiufczea.supabase.co";
-        const SUPABASE_ANON_KEY = "Sb_publishable_8fINRVGTQ7ZVmm9pDyk4AQ_yNtRfoVf";
+        // تم دمج المفتاح الحقيقي الصحيح والمأمون بالكامل هنا
+        const SUPABASE_ANON_KEY = "sb_publishable_8fINRVGTQ7ZVmm9pDyk4AQ_yNtRfoVf";
         
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -150,7 +126,6 @@
             document.getElementById('error-card').classList.add('hidden');
             document.getElementById('last-updated').innerText = "جاري التحميل...";
             try {
-                // استدعاء البيانات من الجدول الاحترافي الجديد exchange_rates
                 const { data, error } = await supabaseClient.from('exchange_rates').select('*');
                 if (error) throw error;
                 
@@ -169,17 +144,13 @@
                         document.getElementById('aden-usd-sell').innerText = row.sell_rate;
                     }
                 });
-                
-                // عرض تاريخ ووقت التحديث الفعلي الحالي
                 const now = new Date();
                 document.getElementById('last-updated').innerText = `تم التحديث: ${now.toLocaleTimeString('ar-YE')}`;
             } catch (err) { 
-                console.error(err);
                 document.getElementById('error-card').classList.remove('hidden'); 
                 document.getElementById('last-updated').innerText = "فشل التحديث";
             }
         }
-
         window.onload = fetchRates;
     </script>
 </body>
