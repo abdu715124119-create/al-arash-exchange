@@ -213,7 +213,7 @@
 
         </div>
 
-        <!-- نافذة إدخال كلمة المرور (Password Modal) -->
+        <!--  نافذة إدخال كلمة المرور (Password Modal) -->
         <div id="password-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md hidden items-center justify-center p-4 z-50">
             <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl relative text-center">
                 <button onclick="closePasswordModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white p-1">
@@ -319,7 +319,8 @@
         const SUPABASE_URL = "https://tmroykbcxddwbiufczea.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtcm95a2JjeGRkd2JpdWZjemVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0NjI0MDYsImV4cCI6MjA2NDAzODQwNn0.2Y4pE6-wHle_8fINR_f8_p8fINR_fI_8f_f_ZVm_8fIN_8fINR_f_f_8f_y_ynTRfoVf";
         
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // تم إصلاح الخطأ البرمجي هنا بتسمية العميل بـ supabaseClient بدلاً من التضارب
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         let rawData = [];
 
         async function fetchRates() {
@@ -332,7 +333,7 @@
             errorCard.classList.add('hidden');
 
             try {
-                const { data, error } = await supabase.from('rates').select('*');
+                const { data, error } = await supabaseClient.from('rates').select('*');
                 if (error) throw error;
 
                 rawData = data || [];
@@ -396,7 +397,6 @@
             }
         }
 
-        // دوال التحكم بالنافذة المنبثقة بالتوافق التام مع Tailwind
         function openPasswordModal() {
             const modal = document.getElementById('password-modal');
             modal.classList.remove('hidden');
@@ -441,7 +441,7 @@
                 const now = new Date().toISOString();
 
                 // 1. تحديث أسعار صنعاء
-                const { error: errorSanaa } = await supabase
+                const { error: errorSanaa } = await supabaseClient
                     .from('rates')
                     .update({
                         sar_buy: parseFloat(document.getElementById('inp-sanaa-sar-buy').value),
@@ -455,7 +455,7 @@
                 if (errorSanaa) throw errorSanaa;
 
                 // 2. تحديث أسعار عدن
-                const { error: errorAden } = await supabase
+                const { error: errorAden } = await supabaseClient
                     .from('rates')
                     .update({
                         sar_buy: parseFloat(document.getElementById('inp-aden-sar-buy').value),
@@ -490,4 +490,4 @@
         window.onload = fetchRates;
     </script>
 </body>
-                                    </html>
+    </html>
