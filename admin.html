@@ -57,11 +57,6 @@ background:#b58d2d;
 #panel{
 display:none;
 }
-
-.logout{
-margin-top:20px;
-background:#c0392b;
-}
 </style>
 
 </head>
@@ -76,4 +71,59 @@ background:#c0392b;
 
 <input id="user" placeholder="اسم المستخدم">
 
-<input id="pass" type="password
+<input id="pass" type="password" placeholder="كلمة المرور">
+
+<button onclick="login()">دخول</button>
+
+<p id="msg"></p>
+
+</div>
+
+
+<div id="panel">
+
+<h2>مرحباً بك</h2>
+
+<p>تم الدخول إلى لوحة الإدارة</p>
+
+<button onclick="logout()">خروج</button>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+function login(){
+
+let user = document.getElementById("user").value;
+let pass = document.getElementById("pass").value;
+
+if(user=="admin" && pass=="123456"){
+
+document.getElementById("login").style.display="none";
+document.getElementById("panel").style.display="block";
+
+}else{
+
+document.getElementById("msg").innerHTML="بيانات الدخول غير صحيحة";
+
+}
+
+}
+
+
+function logout(){
+
+document.getElementById("login").style.display="block";
+document.getElementById("panel").style.display="none";
+
+}
+
+</script>
+
+
+</body>
+</html>
